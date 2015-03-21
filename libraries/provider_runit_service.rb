@@ -512,7 +512,11 @@ exec svlogd -tt /var/log/#{new_resource.service_name}"
             @lsb_init.mode(00755)
             @lsb_init.cookbook('runit')
             @lsb_init.source('init.d.erb')
-            @lsb_init.variables(:name => new_resource.service_name)
+            @lsb_init.variables(
+              :name => new_resource.service_name,
+              :sv_bin => new_resource.sv_bin,
+              :init_dir => ::File.join(new_resource.lsb_init_dir, '')
+            )
           else
             @lsb_init = Chef::Resource::Link.new(initfile, run_context)
             @lsb_init.to(new_resource.sv_bin)
